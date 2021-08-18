@@ -13,9 +13,9 @@ https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/
 
 请实现一个函数，把字符串 s 中的每个空格替换成"%20"。
 
-示例 1：
-输入：s = "We are happy."
-输出："We%20are%20happy."
+示例 1： 
+输入：s = "We are happy."    
+输出："We%20are%20happy."     
 
 # 思路
 
@@ -42,11 +42,11 @@ i指向新长度的末尾，j指向旧长度的末尾。
 
 时间复杂度，空间复杂度均超过100%的用户。
 
-<img src='https://code-thinking.cdn.bcebos.com/pics/%E5%89%91%E6%8C%87Offer05.%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC.png' width=600> </img></div>
+<img src='https://code-thinking.cdn.bcebos.com/pics/剑指Offer05.替换空格.png' width=600> </img></div>
 
-## C++代码
+C++代码如下：
 
-```C++
+```CPP
 class Solution {
 public:
     string replaceSpace(string s) {
@@ -76,17 +76,17 @@ public:
 };
 
 ```
-时间复杂度：O(n)
-空间复杂度：O(1)
+* 时间复杂度：O(n)
+* 空间复杂度：O(1)
 
 此时算上本题，我们已经做了七道双指针相关的题目了分别是：
 
-* [27.移除元素](https://mp.weixin.qq.com/s/wj0T-Xs88_FHJFwayElQlA)
-* [15.三数之和](https://mp.weixin.qq.com/s/r5cgZFu0tv4grBAexdcd8A)
-* [18.四数之和](https://mp.weixin.qq.com/s/nQrcco8AZJV1pAOVjeIU_g)
-* [206.翻转链表](https://mp.weixin.qq.com/s/pnvVP-0ZM7epB8y3w_Njwg)
-* [142.环形链表II](https://mp.weixin.qq.com/s/_QVP3IkRZWx9zIpQRgajzA)
-* [344.反转字符串](https://mp.weixin.qq.com/s/X02S61WCYiCEhaik6VUpFA)
+* [27.移除元素](https://mp.weixin.qq.com/s/RMkulE4NIb6XsSX83ra-Ww)
+* [15.三数之和](https://mp.weixin.qq.com/s/QfTNEByq1YlNSXRKEumwHg)
+* [18.四数之和](https://mp.weixin.qq.com/s/SBU3THi1Kv6Sar7htqCB2Q)
+* [206.翻转链表](https://mp.weixin.qq.com/s/ckEvIVGcNLfrz6OLOMoT0A)
+* [142.环形链表II](https://mp.weixin.qq.com/s/gt_VH3hQTqNxyWcl1ECSbQ)
+* [344.反转字符串](https://mp.weixin.qq.com/s/_rNm66OJVl92gBDIbGpA3w)
 
 # 拓展
 
@@ -121,10 +121,6 @@ for (int i = 0; i < a.size(); i++) {
 所以想处理字符串，我们还是会定义一个string类型。
 
 
-
-
-
-
 ## 其他语言版本
 
 
@@ -150,11 +146,141 @@ public static String replaceSpace(StringBuffer str) {
     }
 ```
 
-Python：
-
 
 Go：
+```go
+// 遍历添加
+func replaceSpace(s string) string {
+    b := []byte(s)
+    result := make([]byte, 0)
+    for i := 0; i < len(b); i++ {
+        if b[i] == ' ' {
+            result = append(result, []byte("%20")...)
+        } else {
+            result = append(result, b[i])
+        }
+    }
+    return string(result)
+}
 
+// 原地修改
+func replaceSpace(s string) string {
+    b := []byte(s)
+    length := len(b)
+    spaceCount := 0
+    // 计算空格数量
+    for _, v := range b {
+        if v == ' ' {
+            spaceCount++
+        }
+    }
+    // 扩展原有切片
+    resizeCount := spaceCount * 2
+    tmp := make([]byte, resizeCount)
+    b = append(b, tmp...)
+    i := length - 1
+    j := len(b) - 1
+    for i >= 0 {
+        if b[i] != ' ' {
+            b[j] = b[i]
+            i--
+            j--
+        } else {
+            b[j] = '0'
+            b[j-1] = '2'
+            b[j-2] = '%'
+            i--
+            j = j - 3
+        }
+    }
+    return string(b)
+}
+```
+
+
+
+
+python：
+```python
+class Solution(object):
+    def replaceSpace(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        list_s = list(s)
+
+        # 记录原本字符串的长度
+        original_end = len(s)
+
+        # 将空格改成%20 使得字符串总长增长 2n，n为原本空格数量。
+        # 所以记录空格数量就可以得到目标字符串的长度
+        n_space = 0
+        for ss in s:
+            if ss == ' ':
+                n_space += 1
+                
+        list_s += ['0'] * 2 * n_space
+
+        # 设置左右指针位置
+        left, right = original_end - 1, len(list_s) - 1
+
+        # 循环直至左指针越界
+        while left >= 0:
+            if list_s[left] == ' ':
+                list_s[right] = '0'
+                list_s[right - 1] = '2'
+                list_s[right - 2] = '%'
+                right -= 3
+            else:
+                list_s[right] = list_s[left]
+                right -= 1
+            
+            left -= 1
+        
+        # 将list变回str，输出
+        s = ''.join(list_s)
+        return s
+            
+```
+
+
+javaScript:
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+ var replaceSpace = function(s) {
+   // 字符串转为数组
+  const strArr = Array.from(s);
+  let count = 0;
+
+  // 计算空格数量
+  for(let i = 0; i < strArr.length; i++) {
+    if (strArr[i] === ' ') {
+      count++;
+    }
+  }
+
+  let left = strArr.length - 1;
+  let right = strArr.length + count * 2 - 1;
+
+  while(left >= 0) {
+    if (strArr[left] === ' ') {
+      strArr[right--] = '0';
+      strArr[right--] = '2';
+      strArr[right--] = '%';
+      left--;
+    } else {
+      strArr[right--] = strArr[left--];
+    }
+  }
+
+  // 数组转字符串
+  return strArr.join('');
+};
+```
 
 
 
@@ -162,4 +288,4 @@ Go：
 * 作者微信：[程序员Carl](https://mp.weixin.qq.com/s/b66DFkOp8OOxdZC_xLZxfw)
 * B站视频：[代码随想录](https://space.bilibili.com/525438321)
 * 知识星球：[代码随想录](https://mp.weixin.qq.com/s/QVF6upVMSbgvZy8lHZS3CQ)
-<div align="center"><img src=../pics/公众号.png width=450 alt=> </img></div>
+<div align="center"><img src=https://code-thinking.cdn.bcebos.com/pics/01二维码.jpg width=450> </img></div>
